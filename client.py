@@ -22,20 +22,36 @@ DIRECCION = DIRECCION[1].split(":")
 IP_SERVER = DIRECCION[0]
 PORT = int(DIRECCION[1])
 
-# Contenido que vamos a enviar
-LINE = METODO + " sip:" + NAME + "@" + IP_SERVER + " SIP/2.0"
+
+# METODO INVITE
+LINE = METODO + " sip:" + NAME + "@" + IP_SERVER + " SIP/2.0\r\n"
 # Creamos el socket, lo configuramos y lo atamos a un servidor/puerto
 my_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 my_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 my_socket.connect((IP_SERVER, PORT))
 
+
+# Envio de informacion
+print "Enviando: " + LINE
+my_socket.send(LINE + '\r\n')
+
 try:
-	print "Enviando: " + LINE
-	my_socket.send(LINE + '\r\n')
+	# Informacion recibida
 	data = my_socket.recv(1024)
-	print 'Recibido -- ', data
-	# Cerramos todo
-	my_socket.close()
-	print "Fin."
 except:
 	print "Error: No server listening at", IP_SERVER, "port",PORT
+
+print 'Recibido -- ', data,
+
+if data.split("\r\n\r\n")[-2] == "SIP/2.0 200 OK":
+	if METODO == "INVITE":
+		if data.split("\r\n\r\n")[-3] == "SIP/2.0 180 Ring" and data.split("\r\n\r\n")[-4] == "SIP/2.0 100 Trying":
+			# Se envia ACK
+			METODO = "ACK"
+			LINE = METODO + " sip:" + NAME + "@" + IP_SERVER + " SIP/2.0\r\n"
+			# Envio de informacion
+			print "Enviando Confirmacion: " + LINE
+			my_socket.send(LINE + '\r\n')
+
+# Cerramos todo
+my_socket.close()
