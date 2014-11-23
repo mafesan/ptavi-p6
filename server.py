@@ -6,6 +6,7 @@ Clase (y programa principal) para un servidor de eco en UDP simple
 
 import SocketServer
 import sys
+import os
 
 class EchoHandler(SocketServer.DatagramRequestHandler):
     """
@@ -19,6 +20,8 @@ class EchoHandler(SocketServer.DatagramRequestHandler):
             # Leyendo línea a línea lo que nos envía el cliente
             line = self.rfile.read()
             print "El cliente nos manda " + line
+            linea = line.split()
+            metodo = linea[0]
 
             # Si no hay más líneas salimos del bucle infinito
             if not line:
