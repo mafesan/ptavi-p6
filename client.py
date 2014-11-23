@@ -5,15 +5,26 @@ Programa cliente que abre un socket a un servidor
 """
 
 import socket
-
+import sys
 # Cliente UDP simple.
 
 # Dirección IP del servidor.
-SERVER = 'localhost'
-PORT = 6001
+metodo = sys.argv[1]
+datosreceptor = sys.argv[2]
+listareceptor = datosreceptor.split('@')
+receptor = listareceptor[0]
+datosred = listareceptor[1]
+datosred = datosred.split(':')
+SERVER = datosred[0]
+PORT = datosred[1]
+
+if len(sys.argv) != 3:
+    sys.exit("Usage: python client.py method receiver@IP:SIPport")
+
+
 
 # Contenido que vamos a enviar
-LINE = '¡Hola mundo!'
+LINE = metodo + 'sip:' + receptor + '@' + SERVER + 'SIP/2.0' 
 
 # Creamos el socket, lo configuramos y lo atamos a un servidor/puerto
 my_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -22,9 +33,11 @@ my_socket.connect((SERVER, PORT))
 
 print "Enviando: " + LINE
 my_socket.send(LINE + '\r\n')
-data = my_socket.recv(1024)
-
-print 'Recibido -- ', data
+try:
+    data = my_socket.recv(1024)
+    print 'Recibido -- ', data
+except socket.error:
+    sys.exit("Error: No server listening at " + SERVER + "port " + PORT)
 print "Terminando socket..."
 
 # Cerramos todo
