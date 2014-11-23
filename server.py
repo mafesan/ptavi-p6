@@ -52,7 +52,12 @@ if __name__ == "__main__":
     
     IP = sys.argv[1]
     PUERTO = sys.argv[2]
-    fichero = sys.argv[3]
+    archivo = sys.argv[3]
+    try: 
+        fichero = open(archivo) 
+    except: 
+        print "Usage: python server.py IP port audio_file"
+
     print "Listening..."
     serv = SocketServer.UDPServer(("", PUERTO), EchoHandler)
     print "Lanzando servidor UDP de eco..."
