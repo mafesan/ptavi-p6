@@ -38,8 +38,12 @@ try:
     print 'Recibido -- ', data
 except socket.error:
     sys.exit("Error: No server listening at " + SERVER + "port " + PORT)
-print "Terminando socket..."
 
-# Cerramos todo
-my_socket.close()
-print "Fin."
+# respuesta al servidor
+if metodo == 'INVITE':
+    my_socket.send('ACK' + 'sip:' + receptor + '@' + SERVER + 'SIP/2.0')
+if metodo == 'BYE':
+    print "Terminando socket..."
+    # Cerramos todo
+    my_socket.close()
+    print "Fin."
