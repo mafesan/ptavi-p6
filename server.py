@@ -25,16 +25,19 @@ class EchoHandler(SocketServer.DatagramRequestHandler):
             if len(sys.argv) != 3:
                 self.wfile.write("SIP/2.0 400 Bad Request" + '\r\n')
             else:
-                if metodo = 'INVITE':
+                if metodo == 'INVITE':
                     self.wfile.write("SIP/2.0 100 Trying" + '\r\n')
                     self.wfile.write("SIP/2.0 180 Ring" + '\r\n')
                     self.wfile.write("SIP/2.0 200 OK" + '\r\n')
-                elif metodo = 'ACK':
+                elif metodo == 'ACK':
                     print "ACK recibido..."
                     aEjecutar = 'mp32rtp -i ' + sys.argv[1] + '-p 23032 ' + \
                                 '< ' + sys.argv[3]
                     print "Envio de RTP..."
-                    os.system(aEjecutar)    
+                    os.system(aEjecutar)
+                elif metodo == 'BYE':
+                    print "BYE recibido..."
+                    self.wfile.write("SIP/2.0 200 OK")     
                 elif metodo != 'INVITE' or 'ACK' or 'BYE':
                     self.wfile.write("SIP/2.0 405 Method Not Allowed" + '\r\n')
             
