@@ -20,7 +20,8 @@ PORT = datosred[1]
 
 if len(sys.argv) != 3:
     sys.exit("Usage: python client.py method receiver@IP:SIPport")
-
+elif metodo != 'INVITE' or metodo != 'BYE':
+    sys.exit("Usage: python client.py method receiver@IP:SIPport")
 
 
 # Contenido que vamos a enviar
