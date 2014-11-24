@@ -20,8 +20,8 @@ if len(sys.argv) == 4:
 else:
     sys.exit("Usage: python server.py IP port audio_file")
 
-class EchoHandler(SocketServer.DatagramRequestHandler):
 
+class EchoHandler(SocketServer.DatagramRequestHandler):
 
     def handle(self):
         """
@@ -40,32 +40,33 @@ class EchoHandler(SocketServer.DatagramRequestHandler):
                 if "\r\n\r\n" in line:
                     print "Mensaje de entrada " + line
                     line = line.split()
-                    print line
-                    if ("sip:" in line[1][:4]) and ("@" in line[1]) and line[2] == 'SIP/2.0':
+
+                    if ("sip:" in line[1][:4]) and \
+                            ("@" in line[1]) and line[2] == 'SIP/2.0':
 
                         line[1] = line[1].split(":")
                         METODO = line[0]
 
                         if METODO not in metodos:
-                            self.wfile.write("SIP/2.0 405 Method Not Allowed")
+                            self.wfile.write("SIP/2.0 405 Method \
+                                Not Allowed\r\n\r\n")
                         else:
                             if METODO == "INVITE" and line[2] == "SIP/2.0":
-                                self.wfile.write("SIP/2.0 100 Trying\r\n\r\n" 
-                                                    + "SIP/2.0 180 Ring\r\n\r\n" 
-                                                    + "SIP/2.0 200 OK\r\n\r\n")
+                                Answer = "SIP/2.0 100 Trying\r\n\r\n" + \
+                                    "SIP/2.0 180 Ring\r\n\r\n" + \
+                                    "SIP/2.0 200 OK\r\n\r\n"
+                                self.wfile.write(Answer)
                             elif METODO == "ACK":
                                 print "Comienza la transmision........."
-                                Streaming = './mp32rtp -i 127.0.0.1 -p 23032 <' + FILE
+                                Streaming = './mp32rtp -i 127.0.0.1 -p \
+                                    23032 <' + FILE
                                 os.system(Streaming)
                                 print "Fin de la emision"
                             elif METODO == "BYE":
                                 self.wfile.write("SIP/2.0 200 OK\r\n\r\n")
                     else:
-                        self.wfile.write("SIP/2.0 400 Bad Request")
-
-
-
-#===================== PROGRAMA PRINCIPAL ====================================
+                        self.wfile.write("SIP/2.0 400 Bad Request\r\n\r\n")
+#============================ PROGRAMA PRINCIPAL ===========================
 if __name__ == "__main__":
     # Creamos servidor de eco y escuchamos
     serv = SocketServer.UDPServer(("", SERVER_PORT), EchoHandler)
