@@ -24,7 +24,6 @@ DIRECCION = DIRECCION[1].split(":")
 IP_SERVER = DIRECCION[0]
 PORT = int(DIRECCION[1])
 
-
 # METODO INVITE
 LINE = METODO + " sip:" + NAME + "@" + IP_SERVER + " SIP/2.0\r\n"
 # Creamos el socket, lo configuramos y lo atamos a un servidor/puerto
