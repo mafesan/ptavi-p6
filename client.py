@@ -48,7 +48,7 @@ print 'Recibido -- ', data,
 data = data.split("\r\n\r\n")
 
 if data[0] == "SIP/2.0 100 Trying" and data[1] == "SIP/2.0 180 Ring":
-	if data[2] == "SIP/2.0 200 OK":	
+	if data[2] == "SIP/2.0 200 OK":
 		# Se envia ACK
 		METODO = "ACK"
 		LINE = METODO + " sip:" + NAME + "@" + IP_SERVER + " SIP/2.0\r\n"
