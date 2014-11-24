@@ -11,10 +11,10 @@ import sys
 metodos = ("INVITE", "BYE", "ACK")
 # CAMPOS => METODO | DIRECCION SIP
 if len(sys.argv) == 3:
-	METODO = sys.argv[1]
-	DIRECCION = sys.argv[2]
+    METODO = sys.argv[1]
+    DIRECCION = sys.argv[2]
 else:
-	print "Usage: python client.py method receiver@IP:SIPport"
+    print "Usage: python client.py method receiver@IP:SIPport"
 
 # Proceso de corte de la variable DIRECCION.
 DIRECCION = DIRECCION.split("@")
@@ -38,23 +38,23 @@ print "Enviando: " + LINE
 my_socket.send(LINE + '\r\n')
 
 try:
-	# Informacion recibida
-	data = my_socket.recv(1024)
+    # Informacion recibida
+    data = my_socket.recv(1024)
 except:
-	print "Error: No server listening at", IP_SERVER, "port",PORT
+    print "Error: No server listening at", IP_SERVER, "port", PORT
 
-print 'Recibido -- ', data,
+print 'Recibido -- ', data
 
 data = data.split("\r\n\r\n")
 
 if data[0] == "SIP/2.0 100 Trying" and data[1] == "SIP/2.0 180 Ring":
-	if data[2] == "SIP/2.0 200 OK":
-		# Se envia ACK
-		METODO = "ACK"
-		LINE = METODO + " sip:" + NAME + "@" + IP_SERVER + " SIP/2.0\r\n"
-		# Envio de informacion
-		print "Enviando Confirmacion: " + LINE
-		my_socket.send(LINE + '\r\n')
+    if data[2] == "SIP/2.0 200 OK":
+        # Se envia ACK
+        METODO = "ACK"
+        LINE = METODO + " sip:" + NAME + "@" + IP_SERVER + " SIP/2.0\r\n"
+        # Envio de informacion
+        print "Enviando Confirmacion: " + LINE
+        my_socket.send(LINE + '\r\n')
 
 # Cerramos todo
 my_socket.close()
