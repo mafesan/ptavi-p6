@@ -27,7 +27,6 @@ class EchoHandler(SocketServer.DatagramRequestHandler):
         """
         Server SIP
         """
-
         # Escribe dirección y puerto del cliente.
         client_address = self.client_address[0]
         client_port = int(self.client_address[1])
@@ -38,28 +37,33 @@ class EchoHandler(SocketServer.DatagramRequestHandler):
             if not line:
                 break
             else:
-                print "Mensaje de entrada " + line
-                line = line.split()
-                line[1] = line[1].split(":")
+                if "\r\n\r\n" in line:
+                    print "Mensaje de entrada " + line
+                    line = line.split()
+                    print line
+                    if ("sip:" in line[1][:4]) and ("@" in line[1]) and line[2] == 'SIP/2.0':
 
-                METODO = line[0]
+                        line[1] = line[1].split(":")
+                        METODO = line[0]
 
-                if METODO not in metodos:
-                    self.wfile.write("SIP/2.0 405 Method Not Allowed")
-                else:
-                    if METODO == "INVITE" and line[2] == "SIP/2.0":
-                        self.wfile.write("SIP/2.0 100 Trying\r\n\r\n" 
-                                            + "SIP/2.0 180 Ring\r\n\r\n" 
-                                            + "SIP/2.0 200 OK\r\n\r\n")
-                    elif METODO == "ACK":
-                        print "Comienza la transmision........."
-                        Streaming = './mp32rtp -i 127.0.0.1 -p 23032 <' + FILE
-                        os.system(Streaming)
-                        print "Fin de la emision"
-                    elif METODO == "BYE":
-                        self.wfile.write("SIP/2.0 200 OK\r\n\r\n")
+                        if METODO not in metodos:
+                            self.wfile.write("SIP/2.0 405 Method Not Allowed")
+                        else:
+                            if METODO == "INVITE" and line[2] == "SIP/2.0":
+                                self.wfile.write("SIP/2.0 100 Trying\r\n\r\n" 
+                                                    + "SIP/2.0 180 Ring\r\n\r\n" 
+                                                    + "SIP/2.0 200 OK\r\n\r\n")
+                            elif METODO == "ACK":
+                                print "Comienza la transmision........."
+                                Streaming = './mp32rtp -i 127.0.0.1 -p 23032 <' + FILE
+                                os.system(Streaming)
+                                print "Fin de la emision"
+                            elif METODO == "BYE":
+                                self.wfile.write("SIP/2.0 200 OK\r\n\r\n")
                     else:
                         self.wfile.write("SIP/2.0 400 Bad Request")
+
+
 
 #===================== PROGRAMA PRINCIPAL ====================================
 if __name__ == "__main__":
