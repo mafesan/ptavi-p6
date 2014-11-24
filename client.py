@@ -16,16 +16,14 @@ receptor = listareceptor[0]
 datosred = listareceptor[1]
 datosred = datosred.split(':')
 SERVER = datosred[0]
-PORT = datosred[1]
+PORT = int(datosred[1])
 
 if len(sys.argv) != 3:
     sys.exit("Usage: python client.py method receiver@IP:SIPport")
-elif metodo != 'INVITE' or metodo != 'BYE':
+if metodo != 'INVITE' and metodo != 'BYE':
     sys.exit("Usage: python client.py method receiver@IP:SIPport")
-
-
 # Contenido que vamos a enviar
-LINE = metodo + 'sip:' + receptor + '@' + SERVER + 'SIP/2.0' 
+LINE = metodo + ' sip:' + receptor + '@' + SERVER + ' SIP/2.0'
 
 # Creamos el socket, lo configuramos y lo atamos a un servidor/puerto
 my_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -38,11 +36,11 @@ try:
     data = my_socket.recv(1024)
     print 'Recibido -- ', data
 except socket.error:
-    sys.exit("Error: No server listening at " + SERVER + "port " + PORT)
+    sys.exit("Error: No server listening at " + SERVER + "port " + str(PORT))
 
 # respuesta al servidor
 if metodo == 'INVITE':
-    my_socket.send('ACK' + 'sip:' + receptor + '@' + SERVER + 'SIP/2.0')
+    my_socket.send('ACK' + ' sip:' + receptor + '@' + SERVER + ' SIP/2.0')
 if metodo == 'BYE':
     print "Terminando socket..."
     # Cerramos todo
