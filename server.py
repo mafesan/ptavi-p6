@@ -52,9 +52,11 @@ class EchoHandler(SocketServer.DatagramRequestHandler):
                                 Not Allowed\r\n\r\n")
                         else:
                             if METODO == "INVITE" and line[2] == "SIP/2.0":
+
                                 Answer = "SIP/2.0 100 Trying\r\n\r\n" + \
-                                    "SIP/2.0 180 Ring\r\n\r\n" + \
+                                    "SIP/2.0 180 Ringing\r\n\r\n" + \
                                     "SIP/2.0 200 OK\r\n\r\n"
+                                    
                                 self.wfile.write(Answer)
                             elif METODO == "ACK":
                                 print "Comienza la transmision........."
