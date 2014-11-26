@@ -28,7 +28,7 @@ class EchoHandler(SocketServer.DatagramRequestHandler):
             else:
                 if metodo == 'INVITE':
                     self.wfile.write("SIP/2.0 100 Trying" + '\r\n')
-                    self.wfile.write("SIP/2.0 180 Ring" + '\r\n')
+                    self.wfile.write("SIP/2.0 180 Ringing" + '\r\n')
                     self.wfile.write("SIP/2.0 200 OK" + '\r\n')
                 elif metodo == 'ACK':
                     print "ACK recibido..."
