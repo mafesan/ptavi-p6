@@ -81,6 +81,7 @@ class SIPHandler(SocketServer.DatagramRequestHandler):
                     to_exe = to_exe + ' -p 23032 < ' + AUDIO_FILE
                     print "Enviando audio..."
                     os.system(to_exe)
+                    print "Fin de la transmision."
                 else:
                     self.wfile.write("SIP/2.0 405 Method Not Allowed\r\n\r\n")
                 print 'Respuesta enviada.'
