@@ -23,7 +23,7 @@ VER = "SIP/2.0"
 RECEPTOR = user_info[0]
 METODO = user_data[1]
 # Comprobamos si el método es conocido
-if METODO not in method_list:
+if not METODO in method_list:
     print usage
     raise SystemExit
 
