@@ -16,7 +16,10 @@ receptor = listareceptor[0]
 datosred = listareceptor[1]
 datosred = datosred.split(':')
 SERVER = datosred[0]
-PORT = int(datosred[1])
+try:
+	PORT = int(datosred[1])
+except ValueError:
+	 sys.exit("Usage: python client.py method receiver@IP:SIPport")
 
 if len(sys.argv) != 3:
     sys.exit("Usage: python client.py method receiver@IP:SIPport")
