@@ -13,7 +13,11 @@ metodos = ("INVITE", "BYE", "ACK")
 
 if len(sys.argv) == 4:
     SERVER_IP = sys.argv[1]
-    SERVER_PORT = int(sys.argv[2])
+    #Para comprobar que el puerto esta bien introducido.
+    try:
+        SERVER_PORT = int(sys.argv[2])
+    except ValueError:
+        sys.exit("Usage: python server.py IP port audio_file")
     FILE = sys.argv[3]
     if not os.path.isfile(FILE):
         sys.exit("Usage: python server.py IP port audio_file")
